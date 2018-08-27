@@ -1,3 +1,5 @@
+# Working example [Vue Trader Demo](https://vue-trader-11.firebaseapp.com/stocks)
+
 # vue-trader
 
 > A Vue.js project
