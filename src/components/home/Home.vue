@@ -5,17 +5,20 @@
       <p>You may Save&Load your data.</p>
       <p>Click on 'End Day' to begin new day.</p>
       <br>
-      <h3>Your funds: {{funds}}</h3>
+      <h3>Your funds: {{ funds | currency}}</h3>
     </div>
   </div>
 </template>
 
 <script>
   export default {
-    data() {
-      return {
-        funds: this.$store.getters.userFunds
+    computed: {
+      funds () {
+        return this.$store.getters.getUserFunds;
       }
     }
   }
 </script>
+
+
+

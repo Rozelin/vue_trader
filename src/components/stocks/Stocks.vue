@@ -5,6 +5,7 @@
       :key="index"
       :price="stock.price"
       :name="stock.name"
+      :qty="stock.qty"
     ></app-stock-item>
   </div>
 </template>

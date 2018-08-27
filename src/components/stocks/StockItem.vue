@@ -1,45 +1,53 @@
 <template>
-  <div class="col-6 mb-3">
+  <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
     <div class="card border-success">
       <div class="card-header">
-        {{ name }} <small>(Price: {{ price }})</small>
+        {{ name }} <small>(Price: {{ price | currency }} | Quantity available: {{ qty }})</small>
       </div>
       <div class="card-body text-success">
         <form class="form-inline">
           <div class="form-group mx-sm-3 mb-2">
-            <input type="number" class="form-control" placeholder="Quantity" v-model="buyQty">
+            <input type="number" min="1" class="form-control" :class="{error: insufficiantFunds}" placeholder="Quantity" v-model="buyQty">
           </div>
           <button
             class="btn btn-primary mb-2"
-            :disabled="buyQty === '' || buyQty === '0'"
+            :disabled="buyQty >= qty || buyQty <= 0"
             @click.prevent="buyActive"
-            >Buy</button>
+            >{{ insufficiantFunds ? 'Insufficient Quantity' : 'Buy' }}</button>
         </form>
       </div>
     </div>
   </div>
 </template>
 
+<style scoped>
+  .error {
+    border: 1px solid red;
+  }
+</style>
+
 <script>
 export default {
-  props: ['price', 'name'],
+  props: ['price', 'name', 'qty'],
   data() {
     return {
-      buyQty: ''
+      buyQty: 0
+    }
+  },
+  computed: {
+    insufficiantFunds() {
+      return this.buyQty > this.qty;
     }
   },
   methods: {
     buyActive() {
       let order = {
-          name: this.name,
-          price: this.price,
-          qty: this.buyQty
+        name: this.name,
+        price: this.price,
+        qty: this.buyQty
       }
-      this.$store.actions.buyStock();
-
-      // let price = this.price * +this.buyQty;
-      // this.$store.commit('updateFunds', -price)
-      // this.buyQty = '';
+      this.$store.dispatch('buyStock', order);
+      this.buyQty = 0;
     }
   }
 }

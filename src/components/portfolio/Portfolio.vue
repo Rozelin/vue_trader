@@ -1,7 +1,8 @@
 <template>
   <div class="row">
+    <h3 v-if="emptyPortfolio">You haven't bought anything yet</h3>
     <app-portfolio-item
-        v-for="(item, index) in funds"
+        v-for="(item, index) in userStocks"
         :name="item.name"
         :price="item.price"
         :qty="item.qty"
@@ -17,7 +18,12 @@
   export default {
     data() {
       return {
-        funds: this.$store.state.userActives
+        userStocks: this.$store.getters.userStocks
+      }
+    },
+    computed: {
+      emptyPortfolio() {
+        return !this.$store.getters.userStocks.length;
       }
     },
     components: {
